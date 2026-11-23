@@ -1,0 +1,39 @@
+Official-source research seed:
+Close: https://developer.close.com/api/overview
+Zendesk: https://developer.zendesk.com/api-reference/
+Intercom: https://developers.intercom.com/docs/build-an-integration/learn-more/authentication
+Freshdesk: https://developer.freshdesk.com/api/
+Pylon: https://docs.usepylon.com/pylon-docs/developer/api/authentication
+Telegram: https://core.telegram.org/bots/api
+Aircall: https://developer.aircall.io/docs/authentication
+Google Ads: https://developers.google.com/google-ads/api/rest/auth
+LinkedIn Marketing: https://learn.microsoft.com/linkedin/marketing/integrations/marketing-tiers
+Mailchimp: https://mailchimp.com/developer/marketing/api-concepts/authentication/
+Klaviyo: https://developers.klaviyo.com/en/docs/authentication_
+Pinterest: https://developer.pinterest.com/docs/getting-started/set-up-authentication-and-authorization/
+SendGrid: https://www.twilio.com/docs/sendgrid/for-developers/sending-email/authentication
+Shopify: https://shopify.dev/docs/api/usage/authentication
+WooCommerce: https://developer.woocommerce.com/docs/apis/rest-api/authentication
+DataForSEO: https://docs.dataforseo.com/v3/auth/
+SE Ranking: https://seranking.com/api/
+MrScraper: https://docs.mrscraper.com/docs/api/authentication
+GitHub: https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api
+Vercel: https://vercel.com/docs/rest-api
+Cloudflare: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/
+Supabase: https://supabase.com/docs/reference/api/introduction
+Datadog: https://docs.datadoghq.com/api/latest/authentication/
+Sentry: https://docs.sentry.io/api/auth/
+Notion: https://developers.notion.com
+Linear: https://linear.app/developers/graphql
+Asana: https://developers.asana.com
+Monday.com: https://developer.monday.com/api-reference/docs/authentication
+ClickUp: https://developer.clickup.com/docs/authentication
+Smartsheet: https://developers.smartsheet.com/api/smartsheet/guides/basics/authentication
+Harvest: https://help.getharvest.com/api-v2/authentication-api/authentication/authentication/
+Plaid: https://plaid.com/docs/quickstart/
+Xero: https://developer.xero.com/documentation/guides/remote-mcp/overview
+Brex: https://developer.brex.com/guides/authentication
+Ramp: https://docs.ramp.com/developer-api/v1/ramp-mcp
+Fathom: https://help.fathom.video/en/articles/8368641
+
+Research policy: sources above were used for a 36-app source-reviewed seed; do not assume every app was checked or every MCP status confirmed.
