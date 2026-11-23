@@ -113,7 +113,7 @@ The current code uses Tavily + OpenAI; it does **not** create or use a Composio 
 5. Wait for the Pages workflow/build to finish. Open the site at:
    `https://hafsa-ahmadi.github.io/urban-doodle/`
 
-The dashboard loads its two data files from `data/apps.json` and `data/reviewed_findings.json`. Keep these paths in place when editing the page.
+The dashboard loads `data/apps.json` and `data/reviewed_findings.json` for the manual seed. When `outputs/automated_results.json` exists, the dashboard uses those automated records for the matrix. To preview it locally, run `python -m http.server 8000` from the repository root and open `http://localhost:8000/docs/`. After a successful agent run, commit the generated `outputs/automated_results.json` and `outputs/automated_verification.json` files to GitHub so Pages can load the fresh data.
 
 ## Push your local changes
 
