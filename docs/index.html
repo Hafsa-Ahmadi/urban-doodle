@@ -40,13 +40,13 @@ ol{padding-left:20px}li{margin:7px 0}.footer{font-size:12px;color:#64748b;margin
 </header>
 <div class="grid">
 <div class="card"><div class="k">Applications in scope</div><div class="v">100</div><div class="small">Exact assignment list</div></div>
-<div class="card"><div class="k">Source-reviewed dossiers</div><div class="v">36 / 100</div><div class="small">Selected across all 10 categories</div></div>
-<div class="card"><div class="k">Pending research</div><div class="v">64 / 100</div><div class="small">Unknown is not a negative finding</div></div>
-<div class="card"><div class="k">Automated accuracy</div><div class="v">Not measured</div><div class="small">Agent pass 1 and pass 2 still need to run</div></div>
+<div class="card"><div class="k">Manual source-reviewed dossiers</div><div class="v">36 / 100</div><div class="small">Seed review across all 10 categories</div></div>
+<div class="card"><div class="k">Manual seed pending</div><div class="v">64 / 100</div><div class="small">Unknown is not a negative finding</div></div>
+<div class="card"><div class="k">Automated pass 1</div><div class="v" id="autoCount">Not run</div><div class="small">Updates when outputs/automated_results.json is committed</div></div>
 </div>
 <section>
 <h2>Executive readout</h2>
-<div class="status"><b>Research status: partial, evidence-backed seed.</b> Thirty-six app dossiers have been reviewed against official documentation. The other sixty-four rows are deliberately marked pending. The automated search-and-extraction pipeline is implemented, but it has not been run here because OpenAI and Tavily credentials were not supplied. Do not present the sample statistics as population-wide findings.</div>
+<div class="status" id="runStatus"><b>Research status: partial, evidence-backed seed.</b> Thirty-six app dossiers have been reviewed against official documentation. The other sixty-four rows are deliberately marked pending. The automated search-and-extraction pipeline is implemented, but it has not been run here because OpenAI and Tavily credentials were not supplied. Do not present the sample statistics as population-wide findings.</div>
 </section>
 <section>
 <h2>Patterns in the 36 reviewed apps</h2>
@@ -110,13 +110,17 @@ function render(){
  document.getElementById("rows").innerHTML=filtered.map(a=>{
   const f=byId[a.id]||{};
   const reviewed=!!byId[a.id];
+  const stateLabel=f.state||"Source-reviewed";
   const doc=f.docs||a.docs_hint||a.official_website_hint;
-  return "<tr><td><b>"+esc(a.id)+". "+esc(a.name)+"</b></td><td>"+esc(a.category)+"</td><td><span class='badge "+(reviewed?"reviewed":"pending")+"'>"+(reviewed?"Source-reviewed":"Pending")+"</span></td><td>"+esc(f.api||"Unknown")+"</td><td>"+esc(f.auth||"Unknown")+"</td><td>"+esc(f.access||"Unknown")+"</td><td>"+esc(f.mcp||"Unverified")+"</td><td>"+esc(f.buildability||"Unknown")+"</td><td>"+esc(f.priority||"Unassigned")+"</td><td><a href='"+esc(doc)+"' target='_blank' rel='noopener'>"+(reviewed?"Reviewed source":"Docs hint")+"</a></td></tr>";
+  return "<tr><td><b>"+esc(a.id)+". "+esc(a.name)+"</b></td><td>"+esc(a.category)+"</td><td><span class='badge "+(reviewed?"reviewed":"pending")+"'>"+(reviewed?esc(stateLabel):"Pending")+"</span></td><td>"+esc(f.api||"Unknown")+"</td><td>"+esc(f.auth||"Unknown")+"</td><td>"+esc(f.access||"Unknown")+"</td><td>"+esc(f.mcp||"Unverified")+"</td><td>"+esc(f.buildability||"Unknown")+"</td><td>"+esc(f.priority||"Unassigned")+"</td><td><a href='"+esc(doc)+"' target='_blank' rel='noopener'>"+(reviewed?"Reviewed source":"Docs hint")+"</a></td></tr>";
  }).join("");
  document.getElementById("count").textContent="Showing "+filtered.length+" of "+apps.length+" applications.";
 }
-Promise.all([fetch("../data/apps.json").then(r=>r.json()),fetch("../data/reviewed_findings.json").then(r=>r.json())]).then(values=>{
- apps=values[0].applications;findings=values[1].findings;byId={};findings.forEach(f=>byId[f.id]=f);
+Promise.all([fetch("../data/apps.json").then(r=>r.json()),fetch("../data/reviewed_findings.json").then(r=>r.json()),fetch("../outputs/automated_results.json").then(r=>r.ok?r.json():null).catch(()=>null)]).then(values=>{
+ apps=values[0].applications;const automated=(values[2]&&values[2].applications)||[];
+ if(automated.length){findings=automated.map(r=>({id:r.id,api:r.api_availability,auth:Array.isArray(r.authentication)?r.authentication.join("; "):r.authentication,access:r.credential_acquisition||r.access_model_bucket,mcp:r.mcp_status,buildability:r.buildability,priority:r.priority,confidence:r.research_confidence,docs:r.developer_docs_url||r.docs_hint,state:r.research_status||"Automated pass 1"}));document.getElementById("autoCount").textContent=automated.length+" / 100";document.getElementById("runStatus").innerHTML="<b>Automated pass 1 output loaded.</b> "+automated.length+" application records are available. The pattern cards still describe the 36-app manual seed. Accuracy remains unmeasured until the verification outputs are evaluated.";}
+ else {findings=values[1].findings;document.getElementById("autoCount").textContent="Not run";}
+ byId={};findings.forEach(f=>byId[f.id]=f);
  const cats=[...new Set(apps.map(a=>a.category))];
  document.getElementById("category").innerHTML='<option value="">All categories</option>'+cats.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join("");
  render();
