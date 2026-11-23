@@ -113,7 +113,7 @@ The current code uses Tavily + OpenAI; it does **not** create or use a Composio 
 5. Wait for the Pages workflow/build to finish. Open the site at:
    `https://hafsa-ahmadi.github.io/urban-doodle/`
 
-The dashboard loads `data/apps.json` and `data/reviewed_findings.json` for the manual seed. When `outputs/automated_results.json` exists, the dashboard uses those automated records for the matrix. To preview it locally, run `python -m http.server 8000` from the repository root and open `http://localhost:8000/docs/`. After a successful agent run, commit the generated `outputs/automated_results.json` and `outputs/automated_verification.json` files to GitHub so Pages can load the fresh data.
+The dashboard loads `data/apps.json` and `data/reviewed_findings.json` for the manual seed. When `outputs/automated_results.json` exists, the dashboard uses those automated records for the matrix. To preview it locally, run `python -m http.server 8000` from the repository root and open `http://localhost:8000/docs/`. After a successful agent run, copy the matrix data into the published docs folder before pushing:\n\n```powershell\nNew-Item -ItemType Directory -Force docs/data | Out-Null\nCopy-Item outputs/automated_results.json docs/data/automated_results.json\ngit add docs/data/automated_results.json outputs/automated_results.json outputs/automated_verification.json\ngit commit -m "Publish automated research results"\ngit push origin main\n```\n\nThe dashboard reads `docs/data/automated_results.json`; the verification report stays in `outputs/automated_verification.json` for auditability.
 
 ## Push your local changes
 
