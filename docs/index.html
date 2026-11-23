@@ -116,7 +116,7 @@ function render(){
  }).join("");
  document.getElementById("count").textContent="Showing "+filtered.length+" of "+apps.length+" applications.";
 }
-Promise.all([fetch("../data/apps.json").then(r=>r.json()),fetch("../data/reviewed_findings.json").then(r=>r.json()),fetch("../outputs/automated_results.json").then(r=>r.ok?r.json():null).catch(()=>null)]).then(values=>{
+Promise.all([fetch("./data/apps.json").then(r=>r.json()),fetch("./data/reviewed_findings.json").then(r=>r.json()),fetch("./data/automated_results.json").then(r=>r.ok?r.json():null).catch(()=>null)]).then(values=>{
  apps=values[0].applications;const automated=(values[2]&&values[2].applications)||[];
  const merged={};values[1].findings.forEach(f=>merged[f.id]=f);
  automated.forEach(r=>{merged[r.id]={id:r.id,api:r.api_availability,auth:Array.isArray(r.authentication)?r.authentication.join("; "):r.authentication,access:r.credential_acquisition||r.access_model_bucket,mcp:r.mcp_status,buildability:r.buildability,priority:r.priority,confidence:r.research_confidence,docs:r.developer_docs_url||r.docs_hint,state:r.research_status||"Automated pass 1"};});
@@ -127,6 +127,6 @@ Promise.all([fetch("../data/apps.json").then(r=>r.json()),fetch("../data/reviewe
  const cats=[...new Set(apps.map(a=>a.category))];
  document.getElementById("category").innerHTML='<option value="">All categories</option>'+cats.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join("");
  render();
-}).catch(err=>{document.getElementById("count").textContent="Could not load matrix data. Check the repository paths /docs and /data. "+err;});
+}).catch(err=>{document.getElementById("count").textContent="Could not load matrix data. Check the files under docs/data/. "+err;});
 ["search","category","state","build"].forEach(id=>document.getElementById(id).addEventListener(id==="search"?"input":"change",render));
 </script></body></html>
