@@ -118,8 +118,11 @@ function render(){
 }
 Promise.all([fetch("../data/apps.json").then(r=>r.json()),fetch("../data/reviewed_findings.json").then(r=>r.json()),fetch("../outputs/automated_results.json").then(r=>r.ok?r.json():null).catch(()=>null)]).then(values=>{
  apps=values[0].applications;const automated=(values[2]&&values[2].applications)||[];
- if(automated.length){findings=automated.map(r=>({id:r.id,api:r.api_availability,auth:Array.isArray(r.authentication)?r.authentication.join("; "):r.authentication,access:r.credential_acquisition||r.access_model_bucket,mcp:r.mcp_status,buildability:r.buildability,priority:r.priority,confidence:r.research_confidence,docs:r.developer_docs_url||r.docs_hint,state:r.research_status||"Automated pass 1"}));document.getElementById("autoCount").textContent=automated.length+" / 100";document.getElementById("runStatus").innerHTML="<b>Automated pass 1 output loaded.</b> "+automated.length+" application records are available. The pattern cards still describe the 36-app manual seed. Accuracy remains unmeasured until the verification outputs are evaluated.";}
- else {findings=values[1].findings;document.getElementById("autoCount").textContent="Not run";}
+ const merged={};values[1].findings.forEach(f=>merged[f.id]=f);
+ automated.forEach(r=>{merged[r.id]={id:r.id,api:r.api_availability,auth:Array.isArray(r.authentication)?r.authentication.join("; "):r.authentication,access:r.credential_acquisition||r.access_model_bucket,mcp:r.mcp_status,buildability:r.buildability,priority:r.priority,confidence:r.research_confidence,docs:r.developer_docs_url||r.docs_hint,state:r.research_status||"Automated pass 1"};});
+ findings=Object.values(merged);
+ document.getElementById("autoCount").textContent=automated.length?automated.length+" / 100":"Not run";
+ if(automated.length){document.getElementById("runStatus").innerHTML="<b>Automated pass 1 output loaded.</b> "+automated.length+" application records are available and merged over the 36-app manual seed where IDs overlap. The pattern cards still describe the manual seed. Accuracy remains unmeasured until the verification outputs are evaluated.";}
  byId={};findings.forEach(f=>byId[f.id]=f);
  const cats=[...new Set(apps.map(a=>a.category))];
  document.getElementById("category").innerHTML='<option value="">All categories</option>'+cats.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join("");
